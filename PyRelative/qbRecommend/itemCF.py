@@ -91,10 +91,11 @@ def recoAndEval(trainPath, testPath, resultPath, topN, K, userCount, totalUserCo
     print("---------recommendation is over !----------")
     return correct_ratio
 
-def newExec():
-    finalFile = open('finalResult.txt', 'w')
+def newExec(seq):
+    filename = 'finalResult_top' + str(seq) + '.txt'
+    finalFile = open(filename, 'w')
     K = 1
-    topN = 1
+    topN = seq
     trainPath = '../ml-100k/u1.base'
     testPath = '../ml-100k/u1.test'
     resultPath = 'result.txt'
@@ -109,5 +110,8 @@ def newExec():
     
 #主程序
 if __name__ == '__main__':
-    newExec()
-    
+    begin = 3
+    end = 20
+    while begin <= end:
+        newExec(begin)
+        begin += 1 
