@@ -49,9 +49,9 @@ def measureSimilarity(user_dict):
     return W
 
 #结合用户喜好对物品排序
-def recommond(user_count, user_dict, K, topN):
+def recommond(resultPath, user_count, user_dict, K, topN):
     W = measureSimilarity(user_dict)
-    f = open("result.txt", "w")
+    f = open(resultPath, "w")
     user_id = 1
     while user_id <= user_count:
         rank = defaultdict(int) #the most important word and easy to write in the wrong site
@@ -82,7 +82,7 @@ def recoAndEval(trainPath, testPath, resultPath, topN, K, userCount, totalUserCo
     d1 = datetime.datetime.now()  
     fileTemp = readFile(trainPath)
     user_dic = createDict(fileTemp)  
-    recommond(userCount, user_dic, K, topN)   
+    recommond(resultPath, userCount, user_dic, K, topN)   
     d2 = datetime.datetime.now()
     interval = d2 - d1  
     total_sec = interval.total_seconds()  
@@ -92,17 +92,17 @@ def recoAndEval(trainPath, testPath, resultPath, topN, K, userCount, totalUserCo
     return correct_ratio
 
 def newExec(seq):
-    filename = 'finalResult_top' + str(seq) + '.txt'
+    filename = 'finalPrecision_top' + str(seq) + '.txt'
     finalFile = open(filename, 'w')
     K = 1
     topN = seq
     trainPath = '../ml-100k/u1.base'
-    testPath = '../ml-100k/u1.test'
-    resultPath = 'result.txt'
+    testPath = '../ml-100k/u1.test'    
     userCount = 450
     totalUserCount = 943
     totalItemCount = 1682
     while K <= 100:
+        resultPath = '../recommendResult/result_top' + str(seq) + '_K' + str(K) + '.txt'
         correct_ratio = recoAndEval(trainPath, testPath, resultPath, topN, K, userCount, totalUserCount, totalItemCount)
         finalFile.write('K = ' + str(K) + ', top' + str(topN) + ': correct ratio = ' + str(correct_ratio) + '\n')
         finalFile.write('------------------------------------------------\n')
@@ -110,8 +110,8 @@ def newExec(seq):
     
 #主程序
 if __name__ == '__main__':
-    begin = 3
-    end = 20
+    begin = 1
+    end = 25
     while begin <= end:
         newExec(begin)
         begin += 1 
